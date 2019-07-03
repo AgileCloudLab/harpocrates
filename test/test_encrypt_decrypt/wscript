@@ -5,4 +5,4 @@ def build(bld):
         target = 'test_encrypt_decrypt',
         source = 'test_encrypt_decrypt.cpp',
         lib = ['cryptopp'],
-        use = ['harpocrates_includes', 'gtest'])    
+        use = ['harpocrates_includes', 'harpocrates', 'gtest'])    
