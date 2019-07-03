@@ -52,12 +52,12 @@ namespace harpocrates
         memset( iv, 0x00, CryptoPP::AES::BLOCKSIZE );
         
         CryptoPP::AES::Decryption aes_decryption(ckey, CryptoPP::AES::DEFAULT_KEYLENGTH);
-        CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption( aes_decryption, iv );
+        CryptoPP::CBC_Mode_ExternalCipher::Decryption cbc_decryption( aes_decryption, iv );
 
         std::string decrypted_text;
-        CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink( decrypted_text ) );
-        stfDecryptor.Put( reinterpret_cast<const unsigned char*>( data.data() ), data.size() );
-        stfDecryptor.MessageEnd();
+        CryptoPP::StreamTransformationFilter stf_decryptor(cbc_decryption, new CryptoPP::StringSink( decrypted_text ) );
+        stf_decryptor.Put( reinterpret_cast<const unsigned char*>( data.data() ), data.size() );
+        stf_decryptor.MessageEnd();
 
         std::vector<uint8_t> decrypted_data = helpers::convert::string_to_vector(decrypted_text);
         data = decrypted_data;         
