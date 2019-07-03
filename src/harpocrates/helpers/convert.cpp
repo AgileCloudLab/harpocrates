@@ -14,15 +14,8 @@ namespace convert
 {
     std::string vector_to_string(const std::vector<uint8_t>& data)
     {
-
-        std::ostringstream oss;
-
-        if (!data.empty())
-        {
-            std::copy(data.begin(), data.end(), std::ostream_iterator<uint8_t>(oss, ""));
-        }
-
-        return oss.str();
+        std::string res((char*) data.data(), data.size());
+        return res; 
     }
 
     

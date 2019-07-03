@@ -11,7 +11,6 @@ namespace harpocrates
     void encrypt(std::vector<uint8_t>& data, const std::string& key)
     {
         std::string crypto_key = key.substr(0, CryptoPP::AES::DEFAULT_KEYLENGTH);
-        std::string data_str = helpers::convert::vector_to_string(data);
         std::string cipher_text; 
         CryptoPP::byte ckey[ CryptoPP::AES::DEFAULT_KEYLENGTH ];
 
@@ -28,7 +27,7 @@ namespace harpocrates
         CryptoPP::CBC_Mode_ExternalCipher::Encryption cbc_encryption( aes_encryption, iv );
 
         CryptoPP::StreamTransformationFilter stf_encryptor(cbc_encryption, new CryptoPP::StringSink( cipher_text ) );
-        stf_encryptor.Put( reinterpret_cast<const unsigned char*>( data_str.c_str() ), data_str.size() );
+        stf_encryptor.Put( reinterpret_cast<const unsigned char*>(data.data() ), data.size() );
         stf_encryptor.MessageEnd();
 
         std::vector<uint8_t> encrypted_data = helpers::convert::string_to_vector(cipher_text);

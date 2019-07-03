@@ -6,7 +6,8 @@
 
 namespace harpocrates
 {
-    void encrypt(std::vector<uint8_t> data, std::string key);
-    void decrypt(std::vector<uint8_t> data, std::string key);     
+    void encrypt(std::vector<uint8_t>& data, const std::string& key);
+    void decrypt(std::vector<uint8_t>& data, const std::string& key);     
 }
 #endif /* HARPOCRATES_H */ 
+
