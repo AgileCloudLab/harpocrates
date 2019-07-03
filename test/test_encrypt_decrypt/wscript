@@ -1,0 +1,8 @@
+
+def build(bld):
+
+    bld(features = 'cxx cxxprogram',
+        target = 'test_encrypt_decrypt',
+        source = 'test_encrypt_decrypt.cpp',
+        lib = ['cryptopp'],
+        use = ['harpocrates_includes', 'harpocrates', 'gtest'])    
