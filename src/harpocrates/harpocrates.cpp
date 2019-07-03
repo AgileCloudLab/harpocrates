@@ -6,6 +6,7 @@
 #include <cryptopp/filters.h>
 #include <cryptopp/cryptlib.h>
 
+#include <iostream>
 namespace harpocrates
 {    
     void encrypt(std::vector<uint8_t>& data, const std::string& key)
@@ -48,7 +49,8 @@ namespace harpocrates
         }
         
         CryptoPP::byte iv[ CryptoPP::AES::BLOCKSIZE ];
-
+        memset( iv, 0x00, CryptoPP::AES::BLOCKSIZE );
+        
         CryptoPP::AES::Decryption aes_decryption(ckey, CryptoPP::AES::DEFAULT_KEYLENGTH);
         CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption( aes_decryption, iv );
 
@@ -58,7 +60,6 @@ namespace harpocrates
         stfDecryptor.MessageEnd();
 
         std::vector<uint8_t> decrypted_data = helpers::convert::string_to_vector(decrypted_text);
-
         data = decrypted_data;         
         
     }
