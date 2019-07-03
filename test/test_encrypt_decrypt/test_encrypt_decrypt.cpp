@@ -29,7 +29,15 @@ TEST(test_encrypt_decrypt, test_encrypt_decrypt_1kb)
     std::string key = "WAPFZ52K0446FPJ32OU5";
 
     harpocrates::encrypt(data, key);
-    EXPECT_NE(data, temp); 
+    EXPECT_NE(data, temp);
+
+    std::vector<uint8_t> temp_crypt(data);
+    EXPECT_EQ(data, temp_crypt);
+
+    harpocrates::decrypt(data, key);
+    EXPECT_NE(data, temp_crypt);
+    EXPECT_EQ(data, temp); 
+    
 }
 
 int main(int argc, char **argv) {

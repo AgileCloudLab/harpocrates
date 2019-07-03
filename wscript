@@ -16,8 +16,7 @@ def options(opt) :
 
 def configure(cnf) :
     cnf.load('compiler_cxx')
-    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3',
-                                      '-print-search-dirs'])
+    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3',])
     cnf.env.append_value('LINKFLAGS',
                          ['-pthread'])
 
@@ -41,7 +40,7 @@ def build(bld):
     # bld.recurse('examples/EXAMPLE_NAME')
 
     # Build Test
-#    bld.recurse('test/test_encrypt_decrypt')
+    bld.recurse('test/test_encrypt_decrypt')
 
 def test(t):
     au_utility.run_tests('build/test')

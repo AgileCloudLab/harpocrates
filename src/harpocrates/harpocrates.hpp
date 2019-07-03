@@ -1,6 +1,7 @@
 #ifndef HARPOCRATES_H
 #define HARPOCRATES_H
 
+#include <string>
 #include <cstdint>
 #include <vector>
 

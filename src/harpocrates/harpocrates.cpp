@@ -40,7 +40,6 @@ namespace harpocrates
     void decrypt(std::vector<uint8_t>& data, const std::string& key)
     {
         std::string crypto_key = key.substr(0, CryptoPP::AES::DEFAULT_KEYLENGTH);
-        std::string cipher_text = helpers::convert::vector_to_string(data);
 
         CryptoPP::byte ckey[ CryptoPP::AES::DEFAULT_KEYLENGTH ];
         for (uint32_t i = 0; i < CryptoPP::AES::DEFAULT_KEYLENGTH; ++i)
@@ -55,8 +54,12 @@ namespace harpocrates
 
         std::string decrypted_text;
         CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink( decrypted_text ) );
-        stfDecryptor.Put( reinterpret_cast<const unsigned char*>( cipher_text.c_str() ), cipher_text.size() );
+        stfDecryptor.Put( reinterpret_cast<const unsigned char*>( data.data() ), data.size() );
         stfDecryptor.MessageEnd();
+
+        std::vector<uint8_t> decrypted_data = helpers::convert::string_to_vector(decrypted_text);
+
+        data = decrypted_data;         
         
     }
 }
