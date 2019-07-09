@@ -16,7 +16,7 @@ def options(opt) :
 
 def configure(cnf) :
     cnf.load('compiler_cxx')
-    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3',])
+    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3'])
     cnf.env.append_value('LINKFLAGS',
                          ['-pthread'])
 
@@ -35,7 +35,15 @@ def build(bld):
         source=bld.path.ant_glob('src/harpocrates/**/*.cpp'),
         libs = ['cryptopp'],
         use = ['harpocrates_includes'])    
-        
+
+    bld(name='benchmark',
+        features='cxx cxxprogram',
+        target='benchmark',
+        source='measurements/benchmark.cpp',
+	lib = ['cryptopp'],
+        use=['harpocrates']
+    )
+    
     # Build Examples
     # bld.recurse('examples/EXAMPLE_NAME')
 
