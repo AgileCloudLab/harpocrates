@@ -22,6 +22,8 @@ int main(int argc, char** argv)
 
     //Calculate the number of iterations
     int iterations = data_size / message_size;
+    if(iterations > 10000)
+      iterations = 10000;
     data_size = iterations * message_size;
 
 
