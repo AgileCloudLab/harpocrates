@@ -33,19 +33,19 @@ def build(bld):
         target='harpocrates',
         includes='../src',
         source=bld.path.ant_glob('src/harpocrates/**/*.cpp'),
-        libs = ['cryptopp'],
+        libs = ['crypto'],
         use = ['harpocrates_includes'])    
 
     bld(name='benchmark',
         features='cxx cxxprogram',
         target='benchmark',
         source='measurements/benchmark.cpp',
-	lib = ['cryptopp'],
+	lib = ['crypto'],
         use=['harpocrates']
     )
     
     # Build Examples
-    # bld.recurse('examples/EXAMPLE_NAME')
+    bld.recurse('examples/simple_example')
 
     # Build Test
     bld.recurse('test/test_encrypt_decrypt')

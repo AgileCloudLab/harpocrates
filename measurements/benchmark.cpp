@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     auto t1 = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < iterations; i++)
       {
-	harpocrates::encrypt(data[i], key);
+          harpocrates::encrypt(key, data[i]);
       }
     auto t2 = std::chrono::high_resolution_clock::now();
 
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     t1 = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < iterations; i++)
       {
-	harpocrates::decrypt(data[i], key);
+          harpocrates::decrypt(key, data[i]);
       }
     t2 = std::chrono::high_resolution_clock::now();
 
