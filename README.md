@@ -142,6 +142,6 @@ std::vector<uint8_t> random_data(size_t size)
 
 
 <center>
-<a href="http://www.au.dk/"><img style="width=50%;" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
-<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img style="width=50%;" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="au-logo"/></a>
+<a href="http://www.au.dk/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
+<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="au-logo"/></a>
 </center>
