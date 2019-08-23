@@ -141,3 +141,7 @@ std::vector<uint8_t> random_data(size_t size)
 ## Acknowledgement 
 
 
+<center>
+<a href="http://www.au.dk/"><img src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
+<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="au-logo"/></a>
+</center>
