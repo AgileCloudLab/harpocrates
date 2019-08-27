@@ -16,7 +16,7 @@ def options(opt) :
 
 def configure(cnf) :
     cnf.load('compiler_cxx')
-    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3'])
+    cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-g', '-Wall', '-Werror', '-Wextra', '-O3'])
     cnf.env.append_value('LINKFLAGS',
                          ['-pthread'])
 
