@@ -23,6 +23,12 @@ int main(void)
     std::vector<uint8_t> validation_data = data;
 
     std::string key = "WAPFZ52K0446FPJ32OU5";
+
+    // Here we encrypt a byte vector with an all 0 IV
+    // The result:
+    // | orignal size | Encrypted data |
+    // Orignal size is the orignal data size as we may need
+    // patting and it takes up 8 bytes
     harpocrates::encrypt(key, data);
 
     if (data == validation_data)
@@ -47,9 +53,13 @@ int main(void)
 
 
     // Example for Randomized IV
-    data = validation_data;
+    // The result:
+    // | orignal size | Encrypted data | RANDOM IV |
+    // Orignal size is the orignal data size as we may need
+    // patting and it takes up 8 bytes
+    std::vector<uint8_t> data_2 = validation_data;
 
-    harpocrates::encrypt(key, data, true);
+    harpocrates::encrypt(key, data_2, true);
 
     if (data == validation_data)
     {
@@ -60,7 +70,7 @@ int main(void)
         std::cout << "Data is encrypted" << std::endl; 
     }
 
-    harpocrates::decrypt(key, data, true);
+    harpocrates::decrypt(key, data_2, true);
     
     if (data == validation_data)
     {

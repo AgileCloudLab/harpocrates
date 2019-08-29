@@ -48,6 +48,24 @@ For documentation we use [*doxygen*](http://doxygen.nl/) to build documentation,
 
 This will generate the documentation in the `build/doc` folder. 
 
+## Padding and data structure
+
+If the data size modulo 128 is not zero, we will add padding until it
+is. This is needed for OpenSSL to encrypt the data. The padding is
+randomly generated and append to the data before encryption. To later
+retrieve the original data, we affix the encrypted data vector with
+the size of the original data. 
+
+If usage of random IV is enabled, we append the IV to the encrypted data. 
+
+This means that for data encrypted without random IV we have the following data structure: 
+
+<img width="512" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/size_of_resulting_data_without_random_iv.svg" alt="data structure without IV"/>
+
+
+
+
+
 ## Example 
 
 **Example with all 0 IV**
