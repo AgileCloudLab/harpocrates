@@ -62,7 +62,9 @@ This means that for data encrypted without random IV we have the following data 
 
 <img width="512" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/size_of_resulting_data_without_random_iv.svg" alt="data structure without IV"/>
 
+and with random IV we have the following data structure
 
+<img width="512" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/size_of_resulting_data_with_random_iv.svg" alt="data structure without IV"/>
 
 
 

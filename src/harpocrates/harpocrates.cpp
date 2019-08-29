@@ -103,8 +103,11 @@ namespace harpocrates
         } else if (org_size % (AES_BLOCK_SIZE * 8) != 0)
         {
             size_t padding = 128 - (org_size  % (AES_BLOCK_SIZE * 8));
+
+            // We can use the generate IV to randomly generate the padding data
+            std::vector<uint8_t> temp_data = generate_iv(org_size + padding);
+
             
-            std::vector<uint8_t> temp_data(org_size + padding, 0);
             for (uint32_t i = 0; i < data.size(); ++i)
             {
                 temp_data.at(i) = data.at(i); 
