@@ -160,6 +160,10 @@ std::vector<uint8_t> random_data(size_t size)
 
 ## Acknowledgement 
 
+This work was partially financed by the SCALE-IoT project (Grant
+No. DFF - 7026-00042B) granted by the Danish Council for Independent
+Research, the Aarhus Universitets Forskningsfond Starting Grant
+Project AUFF-2017-FLS-7-1, and Aarhus University’s DIGIT Centre.
 
 <center>
 <a href="http://www.au.dk/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
