@@ -11,12 +11,15 @@
 #include <ctime>
 
 #include <iostream>
+#include <stdexcept>
+
 namespace harpocrates
 {
     
-    /// Generates a random sequence of size bytes, which is used for the randomised IV
-    /// @param size is the size of the randomise vector in bytes
-    /// @return a vector of bytes
+   /* Generates a random sequence of size bytes, which is used for the randomised IV
+    * @param size is the size of the randomise vector in bytes
+    * @return a vector of bytes
+    */
     std::vector<uint8_t> generate_iv(size_t size)
     {
         srand(static_cast<uint32_t>(time(0)));
@@ -25,16 +28,23 @@ namespace harpocrates
         return data; 
     }
 
-    /// Encryptes the data based on the provided key.
-    /// If the key is longer than 16Bytes no problem we cut it off
-    /// @param key is a string containing the key used for the AES CBC encryption
-    /// @param data is the data to be encrypt and will contain the encrypted data
-    /// @param random_iv determines if we use a random IV. If set to false we will use an all 0 IV. If true we have appended the IV to the data
+    /* Encrypts the data based on the provided key using AES-CBC-128.
+    * If the key is longer than 16Bytes, no problem we cut it off
+    * The input vector is overwritten to contain the result of the encryption and will have the following format:
+    * {SIZE_OF_PADDING(1B) | PADDED_CIPHERTEXT | IV(OPTIONAL 16B)}
+    * The IV is only included if random_iv==true.
+    *
+    * IMPORTANT: the value of random_iv must be the same when calling encrypt and decrypt
+    *
+    * @param key is a string containing the key used for the AES CBC encryption [by default 16 characters long]
+    * @param data is the data to be encrypt and will contain the encrypted data
+    * @param random_iv determines if we use a random IV. If set to false we will use an all 0 IV. If true we have appended the IV to the data
+    */
     void encrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv)
     {
         if (key.size() < HARPOCRATES_AES_KEY_SIZE)
         {
-            // TODO throw error
+            throw std::runtime_error("Provided AES key is too short! By default key must be 16 bytes long");
         }
 
        	// Set up the key, convert it to the format required by OpenSSL
@@ -77,7 +87,6 @@ namespace harpocrates
         }
 
 	//Generate a vector representing the original cleartext_size
-	//std::vector<uint8_t> cleartext_size_vectorized = size_to_vector(cleartext_size);
 	const size_t size_vec_size = 1;// Extra byte to represent the amount of padding
 	ciphertext_size += 1;
 
@@ -97,16 +106,23 @@ namespace harpocrates
 	data = ciphertext;
     }
 
-    /// Encryptes the data based on the provided key.
-    /// If the key is longer than 16Bytes no problem we cut it off 
-    /// @param key is a string containing the key used for the AES CBC decryption
-    /// @param data is the data to be decrypted and will contain the decrypted data
-    /// @param random_iv determines if a random IV was used for encryption. If set to false we will use an all 0 IV
+    /* Decrypts the data based on the provided key using AES-CBC-128.
+    * If the key is longer than 16Bytes, no problem we cut it off
+    * The input vector is overwritten to contain the result of the decryption. The expected input format:
+    * {SIZE_OF_PADDING(1B) | PADDED_CIPHERTEXT | IV(OPTIONAL 16B)}
+    * The IV must only be included if random_iv==true.
+    *
+    * IMPORTANT: the value of random_iv must be the same when calling encrypt and decrypt for a buffer
+    *
+    * @param key is a string containing the key used for the AES CBC decryption [by default 16 characters long]
+    * @param data is the data to be decrypted and will contain the decrypted data
+    * @paramrandom_iv determines if a random IV was used for encryption. If set to false we will use an all 0 IV
+    */
     void decrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv)
     {
         if(key.size() < HARPOCRATES_AES_KEY_SIZE)
         {
-            // TODO throw error
+	    throw std::runtime_error("Provided AES key is too short! By default key must be 16 bytes long");
         }
 
         unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];
