@@ -2,6 +2,7 @@
 
 #include <openssl/aes.h>
 
+#include <string.h>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -13,12 +14,9 @@
 namespace harpocrates
 {
 
-    // Standard AES key size for CBC std is 128bit 
-    const size_t HARPOCRATES_AES_KEY_SIZE = 16;
-
-    /// Converts a size to a byte vector
+    /// Converts a size_t (unsigned int) to a byte vector
     /// @param size_t to be converted
-    /// @return a byte vector representation of the size
+    /// @return a byte vector representation of the size_t
     std::vector<uint8_t> size_to_vector(size_t size)
     {
         std::vector<uint8_t> _size(sizeof(size_t));
@@ -32,7 +30,7 @@ namespace harpocrates
         return _size;
     }
 
-    /// Converts a byte vector to a size_t
+    /// Converts a byte vector to a size_t (unsigned int)
     /// @param a byte vector to be converted
     /// @return a size_t 
     size_t vector_to_size(std::vector<uint8_t> size)
@@ -60,7 +58,7 @@ namespace harpocrates
     }
 
     /// Encryptes the data based on the provided key.
-    /// If the key is longer than 16Bytes no problem we cut it off 
+    /// If the key is longer than 16Bytes no problem we cut it off
     /// @param key is a string containing the key used for the AES CBC encryption
     /// @param data is the data to be encrypt and will contain the encrypted data
     /// @param random_iv determines if we use a random IV. If set to false we will use an all 0 IV. If true we have appended the IV to the data
@@ -71,68 +69,58 @@ namespace harpocrates
             // TODO throw error
         }
 
-        size_t org_size = data.size();
-
-        unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];
-        
+       	// Set up the key, convert it to the format required by OpenSSLs
+        unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];        
         for (uint32_t i = 0; i < HARPOCRATES_AES_KEY_SIZE; ++i)
         {
             ukey[i] = (unsigned char) key[i];
         }
+	AES_KEY encryption_key;
+        AES_set_encrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &encryption_key); //key size in bits rather than bytes
 
-        std::vector<uint8_t> iv;
-        
+	// If necessary, pad the cleartext to have a size that is a multiple of AES_BLOCK_SIZE
+	size_t cleartext_size = data.size();
+	size_t padded_size = cleartext_size;
+	
+	if(cleartext_size % AES_BLOCK_SIZE != 0)
+	{
+	    padded_size += AES_BLOCK_SIZE - cleartext_size % AES_BLOCK_SIZE;
+	    data.resize(padded_size);
+	}
+
+	size_t ciphertext_size = padded_size;
+	
+	// Generate the initialization vector, either randomly or by chosing an all-0 vector
+        std::vector<uint8_t> iv;        
         if (random_iv)
         {
-            iv = generate_iv(AES_BLOCK_SIZE); 
+            iv = generate_iv(AES_BLOCK_SIZE);
+	    ciphertext_size += AES_BLOCK_SIZE;
         }
         else
         {
             iv = std::vector<uint8_t>(AES_BLOCK_SIZE, 0);
         }
 
-        if (org_size < (AES_BLOCK_SIZE * 8))
-        {
+	//Generate a vector representing the original cleartext_size
+	std::vector<uint8_t> cleartext_size_vectorized = size_to_vector(cleartext_size);
+	size_t size_vec_size = cleartext_size_vectorized.size();
+	ciphertext_size += size_vec_size;
 
-            std::vector<uint8_t> temp_data(AES_BLOCK_SIZE * 8, 0);
-            for (uint32_t i = 0; i < data.size(); ++i)
-            {
-                temp_data.at(i) = data.at(i); 
-            }
-            data = temp_data; 
-        } else if (org_size % (AES_BLOCK_SIZE * 8) != 0)
-        {
-            size_t padding = 128 - (org_size  % (AES_BLOCK_SIZE * 8));
+	//Create the vector that will hold the ciphertext and emplace the metadata to its end
+	//Format: {SIZE_OF_CLEARTEXT | PADDED_CIPHERTEXT | IV(OPTIONAL)} 
+	std::vector<uint8_t> ciphertext(ciphertext_size);       
+	memcpy(ciphertext.data(), cleartext_size_vectorized.data(), size_vec_size);
+	if(random_iv)
+	{
+	    memcpy(ciphertext.data() + size_vec_size + padded_size, iv.data(), AES_BLOCK_SIZE);
+	}
+		
+	//Do the actual encryption
+	AES_cbc_encrypt(data.data(), ciphertext.data() + size_vec_size, padded_size, &encryption_key, iv.data(), AES_ENCRYPT);
 
-            // We can use the generate IV to randomly generate the padding data
-            std::vector<uint8_t> temp_data = generate_iv(org_size + padding);
-
-            
-            for (uint32_t i = 0; i < data.size(); ++i)
-            {
-                temp_data.at(i) = data.at(i); 
-            }
-            data = temp_data;             
-        }
-
-        // The openSSL encryption alters the IV and
-        // therefore we use it this persistent iv
-        const std::vector<uint8_t> persistent_iv = iv;
-
-        std::vector<uint8_t> cipher(data.size());
-
-        AES_KEY encryption_key;
-        AES_set_encrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &encryption_key);
-        AES_cbc_encrypt(data.data(), cipher.data(), data.size(), &encryption_key, iv.data(), AES_ENCRYPT);
-
-        std::vector<uint8_t> result = size_to_vector(org_size);
-        std::move(cipher.begin(), cipher.end(), std::back_inserter(result));
-        
-        if (random_iv)
-        {
-            std::move(persistent_iv.begin(), persistent_iv.end(), std::back_inserter(result));
-        }
-        data = result; 
+	//Save result
+	data = ciphertext;
     }
 
     /// Encryptes the data based on the provided key.
@@ -170,7 +158,7 @@ namespace harpocrates
 
         
 
-        std::vector<uint8_t> org_size_vec = std::vector<uint8_t>(size_start, size_end);
+        std::vector<uint8_t> cleartext_size_vec = std::vector<uint8_t>(size_start, size_end);
         std::vector<uint8_t> cipher = std::vector<uint8_t>(cipher_start, cipher_end);        
         
         std::vector<uint8_t> iv;
@@ -187,13 +175,13 @@ namespace harpocrates
             iv = std::vector<uint8_t>(HARPOCRATES_AES_KEY_SIZE, 0);             
         }
 
-        size_t org_size = vector_to_size(org_size_vec);
+        size_t cleartext_size = vector_to_size(cleartext_size_vec);
         std::vector<uint8_t> decrypted(cipher.size());
 
-        if ( org_size < (AES_BLOCK_SIZE * 8))
+        if ( cleartext_size < (AES_BLOCK_SIZE * 8))
         {
             std::vector<uint8_t>::const_iterator data_start = decrypted.begin();
-            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + org_size;
+            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + cleartext_size;
             std::vector<uint8_t> temp_decrypted = std::vector<uint8_t>(data_start, data_end);
             decrypted = temp_decrypted; 
         }
@@ -204,10 +192,10 @@ namespace harpocrates
         // data.assign(decrypted.begin(), decrypted.end());
 
 
-        if (org_size > (AES_BLOCK_SIZE * 8) && org_size % (AES_BLOCK_SIZE * 8) != 0)
+        if (cleartext_size > (AES_BLOCK_SIZE * 8) && cleartext_size % (AES_BLOCK_SIZE * 8) != 0)
         {
             std::vector<uint8_t>::const_iterator data_start = decrypted.begin();
-            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + org_size;
+            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + cleartext_size;
             std::vector<uint8_t> temp_decrypted = std::vector<uint8_t>(data_start, data_end);
             decrypted = temp_decrypted; 
         }
