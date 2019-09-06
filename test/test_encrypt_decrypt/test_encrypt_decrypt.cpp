@@ -260,10 +260,10 @@ TEST(test_encrypt_decrypt, test_encrypt_decrypt_with_random_iv_3b)
     
 }
 
-TEST(test_encrypt_decrypt, test_encrypt_decrypt_with_random_iv_620000b) 
+TEST(test_encrypt_decrypt, test_encrypt_decrypt_with_random_iv_620373b) 
 {
 
-    std::vector<uint8_t> data = generate_data(620000);
+    std::vector<uint8_t> data = generate_data(620373);
     std::vector<uint8_t> temp = data; 
 
     EXPECT_EQ(data, temp);
