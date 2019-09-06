@@ -32,36 +32,6 @@ std::vector<uint8_t> generate_data(size_t size)
     return data; 
 }
 
-TEST(test_encrypt_decrypt, test_size_to_vector_and_back)
-{
-    size_t size = 6211;
-    std::vector temp_size = harpocrates::size_to_vector(size);
-    EXPECT_EQ(temp_size.size(), (size_t)8);
-    size_t back_size = harpocrates::vector_to_size(temp_size);
-    EXPECT_EQ(size, back_size);
-    
-}
-
-TEST(test_encrypt_decrypt, test_size_to_vector_and_back_1kB)
-{
-    size_t size = 1024;
-    std::vector temp_size = harpocrates::size_to_vector(size);
-    EXPECT_EQ(temp_size.size(), (size_t)8);
-    size_t back_size = harpocrates::vector_to_size(temp_size);
-    EXPECT_EQ(size, back_size);
-    
-}
-
-
-TEST(test_encrypt_decrypt, test_size_to_vector_and_back_1026b)
-{
-    size_t size = 1026;
-    std::vector temp_size = harpocrates::size_to_vector(size);
-    EXPECT_EQ(temp_size.size(), (size_t)8);
-    size_t back_size = harpocrates::vector_to_size(temp_size);
-    EXPECT_EQ(size, back_size);
-    
-}
 
 TEST(test_encrypt_decrypt, test_encrypt_decrypt_1kb)
 {

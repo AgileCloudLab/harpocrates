@@ -13,38 +13,6 @@
 #include <iostream>
 namespace harpocrates
 {
-
-    /// Converts a size_t (unsigned int) to a byte vector
-    /// @param size_t to be converted
-    /// @return a byte vector representation of the size_t
-    std::vector<uint8_t> size_to_vector(size_t size)
-    {
-        std::vector<uint8_t> _size(sizeof(size_t));
-
-
-        for (uint8_t i = 0; i < sizeof(size_t); ++i)
-        {
-            _size.at(i) = 0xFF & (size >> (i * 8));
-        }
-        
-        return _size;
-    }
-
-    /// Converts a byte vector to a size_t (unsigned int)
-    /// @param a byte vector to be converted
-    /// @return a size_t 
-    size_t vector_to_size(std::vector<uint8_t> size)
-    {
-        
-        size_t _size = 0;
-
-        for (uint8_t i = 0; i < size.size(); ++i)
-        {
-            _size ^=  (((uint64_t)size.at(i)) << (i * 8));
-        }
-
-        return _size; 
-    }
     
     /// Generates a random sequence of size bytes, which is used for the randomised IV
     /// @param size is the size of the randomise vector in bytes
@@ -81,10 +49,16 @@ namespace harpocrates
 	// If necessary, pad the cleartext to have a size that is a multiple of AES_BLOCK_SIZE
 	size_t cleartext_size = data.size();
 	size_t padded_size = cleartext_size;
+	uint8_t padding  = AES_BLOCK_SIZE - cleartext_size % AES_BLOCK_SIZE;
 	
-	if(cleartext_size % AES_BLOCK_SIZE != 0)
+	if(padding == AES_BLOCK_SIZE)
 	{
-	    padded_size += AES_BLOCK_SIZE - cleartext_size % AES_BLOCK_SIZE;
+	    padding = 0;
+	}
+	    
+	if(padding != 0)
+	{
+	    padded_size += padding;
 	    data.resize(padded_size);
 	}
 
@@ -103,14 +77,14 @@ namespace harpocrates
         }
 
 	//Generate a vector representing the original cleartext_size
-	std::vector<uint8_t> cleartext_size_vectorized = size_to_vector(cleartext_size);
-	size_t size_vec_size = cleartext_size_vectorized.size();
-	ciphertext_size += size_vec_size;
+	//std::vector<uint8_t> cleartext_size_vectorized = size_to_vector(cleartext_size);
+	const size_t size_vec_size = 1;// Extra byte to represent the amount of padding
+	ciphertext_size += 1;
 
 	//Create the vector that will hold the ciphertext and emplace the metadata to its end
-	//Format: {SIZE_OF_CLEARTEXT | PADDED_CIPHERTEXT | IV(OPTIONAL)} 
+	//Format: {SIZE_OF_PADDING(1B) | PADDED_CIPHERTEXT | IV(OPTIONAL 16B)} 
 	std::vector<uint8_t> ciphertext(ciphertext_size);       
-	memcpy(ciphertext.data(), cleartext_size_vectorized.data(), size_vec_size);
+	ciphertext[0] = padding;
 	if(random_iv)
 	{
 	    memcpy(ciphertext.data() + size_vec_size + padded_size, iv.data(), AES_BLOCK_SIZE);
@@ -147,10 +121,8 @@ namespace harpocrates
         AES_set_decrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &decrypt_key); //key size in bits rather than bytes
 
 	//Extract the metadata from data
-	//Format: {SIZE_OF_CLEARTEXT | PADDED_CIPHERTEXT | IV(OPTIONAL)} 
-        std::vector<uint8_t>::const_iterator size_start = data.begin();
-        std::vector<uint8_t>::const_iterator size_end = data.begin() + sizeof(size_t);
-        std::vector<uint8_t>::const_iterator cipher_start = size_end;
+	//Format: {SIZE_OF_PADDING(1B) | PADDED_CIPHERTEXT | IV(OPTIONAL 16B)}
+	std::vector<uint8_t>::const_iterator cipher_start = data.begin() + 1;
         std::vector<uint8_t>::const_iterator cipher_end;
 
         if (random_iv)
@@ -162,7 +134,6 @@ namespace harpocrates
             cipher_end = data.end();
         }
 
-        std::vector<uint8_t> cleartext_size_vec = std::vector<uint8_t>(size_start, size_end);
         std::vector<uint8_t> cipher = std::vector<uint8_t>(cipher_start, cipher_end);        
         
         std::vector<uint8_t> iv;
@@ -179,7 +150,7 @@ namespace harpocrates
             iv = std::vector<uint8_t>(AES_BLOCK_SIZE, 0);             
         }
 
-        size_t cleartext_size = vector_to_size(cleartext_size_vec);
+        size_t cleartext_size = cipher.size() - data[0];
         std::vector<uint8_t> decrypted(cipher.size());
 
         // Do the actual decryption

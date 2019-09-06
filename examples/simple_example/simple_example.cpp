@@ -19,7 +19,7 @@ std::vector<uint8_t> random_data(size_t size)
 int main(void)
 {
     // Generate a 1kB data vector
-    std::vector<uint8_t> data = random_data(1040);
+    std::vector<uint8_t> data = random_data(1042);
     std::vector<uint8_t> validation_data = data;
 
     std::string key = "WAPFZ52K0446FPJ32OU5";
