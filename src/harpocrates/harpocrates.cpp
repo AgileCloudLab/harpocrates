@@ -69,7 +69,7 @@ namespace harpocrates
             // TODO throw error
         }
 
-       	// Set up the key, convert it to the format required by OpenSSLs
+       	// Set up the key, convert it to the format required by OpenSSL
         unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];        
         for (uint32_t i = 0; i < HARPOCRATES_AES_KEY_SIZE; ++i)
         {
@@ -130,33 +130,37 @@ namespace harpocrates
     /// @param random_iv determines if a random IV was used for encryption. If set to false we will use an all 0 IV
     void decrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv)
     {
-        if (key.size() < HARPOCRATES_AES_KEY_SIZE)
+        if(key.size() < HARPOCRATES_AES_KEY_SIZE)
         {
             // TODO throw error
         }
 
         unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];
 
+	// Set up the key, convert it to the format required by OpenSSL
         for (uint32_t i = 0; i < HARPOCRATES_AES_KEY_SIZE; ++i)
         {
             ukey[i] = (unsigned char) key[i];
         }
-        
+	
+	AES_KEY decrypt_key;
+        AES_set_decrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &decrypt_key); //key size in bits rather than bytes
+
+	//Extract the metadata from data
+	//Format: {SIZE_OF_CLEARTEXT | PADDED_CIPHERTEXT | IV(OPTIONAL)} 
         std::vector<uint8_t>::const_iterator size_start = data.begin();
-        std::vector<uint8_t>::const_iterator size_end = data.begin() + 8;
-        std::vector<uint8_t>::const_iterator cipher_start = data.begin() + 8;
+        std::vector<uint8_t>::const_iterator size_end = data.begin() + sizeof(size_t);
+        std::vector<uint8_t>::const_iterator cipher_start = size_end;
         std::vector<uint8_t>::const_iterator cipher_end;
 
         if (random_iv)
         {
-            cipher_end = data.begin() + (data.size() - HARPOCRATES_AES_KEY_SIZE);
+            cipher_end = data.begin() + data.size() - AES_BLOCK_SIZE;
         }
         else
         {
             cipher_end = data.end();
         }
-
-        
 
         std::vector<uint8_t> cleartext_size_vec = std::vector<uint8_t>(size_start, size_end);
         std::vector<uint8_t> cipher = std::vector<uint8_t>(cipher_start, cipher_end);        
@@ -165,40 +169,24 @@ namespace harpocrates
         
         if (random_iv)
         {
-            std::vector<uint8_t>::const_iterator iv_start = data.begin() + (data.size() - HARPOCRATES_AES_KEY_SIZE);
+            std::vector<uint8_t>::const_iterator iv_start = cipher_end;
             std::vector<uint8_t>::const_iterator iv_end = data.end();
             
             iv = std::vector<uint8_t>(iv_start, iv_end);            
         }
         else
         {
-            iv = std::vector<uint8_t>(HARPOCRATES_AES_KEY_SIZE, 0);             
+            iv = std::vector<uint8_t>(AES_BLOCK_SIZE, 0);             
         }
 
         size_t cleartext_size = vector_to_size(cleartext_size_vec);
         std::vector<uint8_t> decrypted(cipher.size());
 
-        if ( cleartext_size < (AES_BLOCK_SIZE * 8))
-        {
-            std::vector<uint8_t>::const_iterator data_start = decrypted.begin();
-            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + cleartext_size;
-            std::vector<uint8_t> temp_decrypted = std::vector<uint8_t>(data_start, data_end);
-            decrypted = temp_decrypted; 
-        }
+        // Do the actual decryption
+	AES_cbc_encrypt(cipher.data(), decrypted.data(), cipher.size(), &decrypt_key,iv.data(), AES_DECRYPT);
 
-        AES_KEY decrypt_key;
-        AES_set_decrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &decrypt_key);
-        AES_cbc_encrypt(cipher.data(), decrypted.data(), cipher.size(), &decrypt_key,iv.data(), AES_DECRYPT);
-        // data.assign(decrypted.begin(), decrypted.end());
-
-
-        if (cleartext_size > (AES_BLOCK_SIZE * 8) && cleartext_size % (AES_BLOCK_SIZE * 8) != 0)
-        {
-            std::vector<uint8_t>::const_iterator data_start = decrypted.begin();
-            std::vector<uint8_t>::const_iterator data_end = decrypted.begin() + cleartext_size;
-            std::vector<uint8_t> temp_decrypted = std::vector<uint8_t>(data_start, data_end);
-            decrypted = temp_decrypted; 
-        }
+	//Remove any potential padding
+	decrypted.resize(cleartext_size);
         data = decrypted; 
     }
 }
