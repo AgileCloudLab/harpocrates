@@ -1,4 +1,5 @@
 #include "harpocrates.hpp"
+#include "static_block.hpp" //We need this to ensure srand is called when the application starts
 
 #include <openssl/aes.h>
 
@@ -13,6 +14,10 @@
 #include <iostream>
 #include <stdexcept>
 
+static_block {
+    srand(static_cast<uint32_t>(time(0)));
+}
+
 namespace harpocrates
 {
     
@@ -22,7 +27,6 @@ namespace harpocrates
     */
     std::vector<uint8_t> generate_iv(size_t size)
     {
-        srand(static_cast<uint32_t>(time(0)));
         std::vector<uint8_t> data(size);
         std::generate(data.begin(), data.end(), rand);
         return data; 

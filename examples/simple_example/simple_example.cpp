@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <iostream>
+#include <sstream>
 
 std::vector<uint8_t> random_data(size_t size)
 {
@@ -14,6 +15,17 @@ std::vector<uint8_t> random_data(size_t size)
     std::vector<uint8_t> data(size);
     std::generate(data.begin(), data.end(), rand);
     return data; 
+}
+
+void print_data(const std::vector<uint8_t>& data)
+{
+    std::stringstream ss;
+    for (const auto& elm : data)
+    {
+        ss << std::hex << (int) elm;
+    }
+
+    std::cout << ss.str() << std::endl;
 }
 
 int main(void)
@@ -30,7 +42,7 @@ int main(void)
     // Orignal size is the orignal data size as we may need
     // padding and it takes up 8 bytes
     harpocrates::encrypt(key, data);
-
+    
     if (data == validation_data)
     {
         std::cout << "Something went wrong during encrypt, please report a bug" << std::endl;
@@ -60,7 +72,7 @@ int main(void)
     std::vector<uint8_t> data_2 = validation_data;
 
     harpocrates::encrypt(key, data_2, true);
-
+    
     if (data_2 == validation_data)
     {
         std::cout << "Something went wrong during encrypt, please report a bug" << std::endl;
