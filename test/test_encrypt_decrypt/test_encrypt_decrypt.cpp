@@ -282,6 +282,23 @@ TEST(test_encrypt_decrypt, test_encrypt_decrypt_with_random_iv_620373b)
     
 }
 
+TEST(test_encrypt_decrypt, test_encrypt_decrypt_with_random_iv_check_iv) 
+{
+
+    std::vector<uint8_t> data = generate_data(20);
+    std::vector<uint8_t> cipher = data;
+    std::vector<uint8_t> cipher2 = data; 
+
+    EXPECT_EQ(data, cipher);
+    
+    std::string key = "WAPFZ52K0446FPJ32OU5";
+
+    harpocrates::encrypt(key, cipher, true);
+    harpocrates::encrypt(key, cipher2, true);
+    EXPECT_NE(cipher, cipher2);
+    
+}
+
 
 
 int main(int argc, char **argv) {
