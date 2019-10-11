@@ -1,1 +1,7 @@
 *~
+build/
+build_current/
+resolve_symlinks/
+resolved_dependencies/
+.lock-waf_darwin_build
+build_current

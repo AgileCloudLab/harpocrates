@@ -16,8 +16,14 @@ def options(opt) :
 def configure(cnf) :
     cnf.load('compiler_cxx')
     cnf.env.append_value('CXXFLAGS', ['-std=c++17', '-Wall', '-Werror', '-Wextra', '-O3'])
-    cnf.env.append_value('LINKFLAGS',
-                         ['-pthread'])
+
+    if sys.platform == 'darwin':
+            cnf.env.append_value('CXXFLAGS',
+                                 ['-isysroot/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk', '-stdlib=libc++', '-I/usr/local/opt/openssl/include'])
+
+            cnf.env.append_value('LINKFLAGS', ['-L/usr/local/opt/openssl/lib'])
+                    
+    cnf.env.append_value('LINKFLAGS', ['-pthread', '-lcrypto'])
 
 
 def build(bld):
