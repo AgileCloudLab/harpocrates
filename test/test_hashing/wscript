@@ -1,0 +1,8 @@
+
+def build(bld):
+
+    bld(features = 'cxx cxxprogram',
+        target = 'test_hashing',
+        source = 'test_hashing.cpp',
+        lib = ['crypto'],        
+        use = ['harpocrates_includes', 'harpocrates', 'gtest'])    

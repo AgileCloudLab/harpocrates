@@ -54,6 +54,7 @@ def build(bld):
 
     # Build Test
     bld.recurse('test/test_encrypt_decrypt')
+    bld.recurse('test/test_hashing')    
 
 def test(t):
     run_tests('build/test')
