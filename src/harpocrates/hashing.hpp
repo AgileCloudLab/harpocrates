@@ -44,10 +44,22 @@ enum hash_type
     /// @param hash the sink for the hash        
     void sha256_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
 
+    /// Creates a SHA-256 hash finger print for a chunk, pointer-based version
+    /// @param data the data chunk the fingerprint will be constructed for
+    /// @param size length of data
+    /// @param hash the sink for the hash, memory allocated by caller
+    void sha256_hash(const uint8_t* data, const size_t size, unsigned char* hash);
+
     /// Creates a SHA-512 hash finger print for a chunk
     /// @param data the data chunk the fingerprint will be constructed for
     /// @param hash the sink for the hash        
     void sha512_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
+
+    /// Creates a SHA-512 hash finger print for a chunk, pointer-based version
+    /// @param data the data chunk the fingerprint will be constructed for
+    /// @param size length of data
+    /// @param hash the sink for the hash, memory allocated by caller
+    void sha512_hash(const uint8_t* data, const size_t size, unsigned char* hash);
 
     /// Returns length of digest for specified hash function
     /// @param type the type of hash function
