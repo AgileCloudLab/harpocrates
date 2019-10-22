@@ -23,12 +23,31 @@ namespace hashing
         }
     }
 
+    void hash(const uint8_t* data, const size_t size, unsigned char** hash, hash_type type)
+    {
+        switch(type)
+        {
+        case hash_type::SHA1:
+            sha1_hash(data, size, hash);
+            break;
+	    /*   case hash_type::SHA256:
+            sha256_hash(data, hash);
+            break;
+        case hash_type::SHA512:
+            sha512_hash(data, hash);
+            break;*/
+        default:
+            sha1_hash(data, size, hash);
+            break;
+        }
+    }
+
     void sha1_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
     {
         unsigned char digest[SHA_DIGEST_LENGTH];
-        
+
         SHA_CTX shactx;
-    
+
         SHA1_Init(&shactx);
         SHA1_Update(&shactx, data.data(), data.size() - 1);
         SHA1_Final(digest, &shactx);
@@ -38,6 +57,19 @@ namespace hashing
         {
             hash.at(i) = (uint8_t) digest[i]; 
         }
+    }
+
+    void sha1_hash(const uint8_t* data, const size_t size, unsigned char** hash)
+    {
+        unsigned char* digest =  new unsigned char[SHA_DIGEST_LENGTH];
+
+        SHA_CTX shactx;
+
+        SHA1_Init(&shactx);
+        SHA1_Update(&shactx, data, size);
+        SHA1_Final(digest, &shactx);
+
+	*hash = digest;
     }
 
     void sha256_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
@@ -73,6 +105,21 @@ namespace hashing
             hash.at(i) = (uint8_t) digest[i]; 
         }
     }
+
+     size_t get_digest_length(hash_type type)
+     {
+	switch(type)
+        {
+        case hash_type::SHA1:
+            return SHA_DIGEST_LENGTH;
+	case hash_type::SHA256:
+	    return SHA256_DIGEST_LENGTH;
+        case hash_type::SHA512:
+            return SHA512_DIGEST_LENGTH;
+        default:
+            return SHA_DIGEST_LENGTH;
+        }
+     }
 
     
 }
