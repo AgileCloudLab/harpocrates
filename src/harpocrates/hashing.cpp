@@ -23,7 +23,7 @@ namespace hashing
         }
     }
 
-    void hash(const uint8_t* data, const size_t size, unsigned char** hash, hash_type type)
+    void hash(const uint8_t* data, const size_t size, unsigned char* hash, hash_type type)
     {
         switch(type)
         {
@@ -59,17 +59,13 @@ namespace hashing
         }
     }
 
-    void sha1_hash(const uint8_t* data, const size_t size, unsigned char** hash)
+    void sha1_hash(const uint8_t* data, const size_t size, unsigned char* hash)
     {
-        unsigned char* digest =  new unsigned char[SHA_DIGEST_LENGTH];
-
         SHA_CTX shactx;
 
         SHA1_Init(&shactx);
         SHA1_Update(&shactx, data, size);
-        SHA1_Final(digest, &shactx);
-
-	*hash = digest;
+        SHA1_Final(hash, &shactx);
     }
 
     void sha256_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
