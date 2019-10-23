@@ -54,7 +54,8 @@ def build(bld):
 
     # Build Test
     bld.recurse('test/test_encrypt_decrypt')
-    bld.recurse('test/test_hashing')    
+    bld.recurse('test/test_hashing')
+    bld.recurse('test/test_hashing_with_pointers')
 
 def test(t):
     run_tests('build/test')
