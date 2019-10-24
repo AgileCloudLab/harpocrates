@@ -23,7 +23,7 @@ namespace hashing
         }
     }
 
-    void hash(const uint8_t* data, const size_t size, unsigned char* hash, hash_type type)
+    void hash(const uint8_t* data, const size_t size, uint8_t* hash, hash_type type)
     {
         switch(type)
         {
@@ -59,7 +59,7 @@ namespace hashing
         }
     }
 
-    void sha1_hash(const uint8_t* data, const size_t size, unsigned char* hash)
+    void sha1_hash(const uint8_t* data, const size_t size, uint8_t* hash)
     {
         SHA_CTX shactx;
 
@@ -85,7 +85,7 @@ namespace hashing
         }
     }
 
-    void sha256_hash(const uint8_t* data, const size_t size, unsigned char* hash)
+    void sha256_hash(const uint8_t* data, const size_t size, uint8_t* hash)
     {
 	SHA256_CTX shactx;
 
@@ -111,7 +111,7 @@ namespace hashing
         }
     }
 
-    void sha512_hash(const uint8_t* data, const size_t size, unsigned char* hash)
+    void sha512_hash(const uint8_t* data, const size_t size, uint8_t* hash)
     {
 	SHA512_CTX shactx;
 
