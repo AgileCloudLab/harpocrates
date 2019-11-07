@@ -1,8 +1,14 @@
 # Harpocrates
 
-Harpocrates is a library for easy AES CBC encryption/decryption of `std::vector<uint8_t>` in C++.
+Harpocrates is a software library for data encryption and hashing, which provide a simple to use API.
+The library is based on top of OpenSSL and simply serves an easy to use API which allows you to abstract away the details.
 
 Harpocrates is developed at Aarhus University, Department of Engineering in the Group for Network Computing, Communications and Storage. 
+
+#### Explaining the name 
+Harpocrates is the Greek god of silence, secretes and confidentiality 
+
+
 
 ## License 
 
@@ -167,5 +173,6 @@ Project AUFF-2017-FLS-7-1, and Aarhus University’s DIGIT Centre.
 
 <center>
 <a href="http://www.au.dk/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
-<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="au-logo"/></a>
+<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="scale-iot-logo"/></a>
+<a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/netx-logo.png" alt="netx-logo" /></a>
 </center>
