@@ -45,9 +45,9 @@ void test_hashing_with_pointers(int data_size, harpocrates::hashing::hash_type h
     std::vector<uint8_t> hash2(digest_size);
     std::vector<uint8_t> hash3(digest_size);    
     
-    harpocrates::hashing::hash(data.data(), data_size, hash1.data(), hash_type);
-    harpocrates::hashing::hash(data1.data(), data_size, hash2.data(), hash_type);
-    harpocrates::hashing::hash(data2.data(), data_size, hash3.data(), hash_type);        
+    harpocrates::hashing::pointers::hash(data.data(), data_size, hash1.data(), hash_type);
+    harpocrates::hashing::pointers::hash(data1.data(), data_size, hash2.data(), hash_type);
+    harpocrates::hashing::pointers::hash(data2.data(), data_size, hash3.data(), hash_type);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    

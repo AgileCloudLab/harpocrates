@@ -45,9 +45,9 @@ TEST(test_hashing, test_sha1_hashing_1kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha1_hash(data, hash1);
-    harpocrates::hashing::sha1_hash(data1, hash2);
-    harpocrates::hashing::sha1_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha1_hash(data, hash1);
+    harpocrates::hashing::vectors::sha1_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha1_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
@@ -67,9 +67,9 @@ TEST(test_hashing, test_sha1_hashing_4kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha1_hash(data, hash1);
-    harpocrates::hashing::sha1_hash(data1, hash2);
-    harpocrates::hashing::sha1_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha1_hash(data, hash1);
+    harpocrates::hashing::vectors::sha1_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha1_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
@@ -89,9 +89,9 @@ TEST(test_hashing, test_sha256_hashing_1kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha256_hash(data, hash1);
-    harpocrates::hashing::sha256_hash(data1, hash2);
-    harpocrates::hashing::sha256_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha256_hash(data, hash1);
+    harpocrates::hashing::vectors::sha256_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha256_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
@@ -111,9 +111,9 @@ TEST(test_hashing, test_sha256_hashing_4kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha256_hash(data, hash1);
-    harpocrates::hashing::sha256_hash(data1, hash2);
-    harpocrates::hashing::sha256_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha256_hash(data, hash1);
+    harpocrates::hashing::vectors::sha256_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha256_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
@@ -133,9 +133,9 @@ TEST(test_hashing, test_sha512_hashing_1kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha512_hash(data, hash1);
-    harpocrates::hashing::sha512_hash(data1, hash2);
-    harpocrates::hashing::sha512_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha512_hash(data, hash1);
+    harpocrates::hashing::vectors::sha512_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha512_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
@@ -155,9 +155,9 @@ TEST(test_hashing, test_sha512_hashing_4kb)
     std::vector<uint8_t> hash2;
     std::vector<uint8_t> hash3;    
     
-    harpocrates::hashing::sha512_hash(data, hash1);
-    harpocrates::hashing::sha512_hash(data1, hash2);
-    harpocrates::hashing::sha512_hash(data2, hash3);        
+    harpocrates::hashing::vectors::sha512_hash(data, hash1);
+    harpocrates::hashing::vectors::sha512_hash(data1, hash2);
+    harpocrates::hashing::vectors::sha512_hash(data2, hash3);        
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
