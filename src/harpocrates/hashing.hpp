@@ -43,6 +43,10 @@ namespace vectors
     /// @param data the data chunk the fingerprint will be constructed for
     /// @param hash the sink for the hash        
     void sha512_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
+
+    void HMAC_SHA1(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
+    void HMAC_MD5(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
+        
 }
 
 namespace pointers

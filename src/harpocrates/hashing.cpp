@@ -1,5 +1,13 @@
 #include "hashing.hpp"
+
+#include <openssl/engine.h>
+#include <openssl/evp.h>
+
 #include <openssl/sha.h>
+#include <openssl/hmac.h>
+
+#include <cstring>
+
 namespace harpocrates
 {
 namespace hashing
@@ -90,7 +98,40 @@ namespace vectors
         {
             hash.at(i) = (uint8_t) digest[i]; 
         }
-    }    
+    }
+
+    void HMAC_SHA1(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
+    {
+        hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
+        
+        std::vector<uint8_t> input(data.size() + 1);
+        input.at(0) = 0x01;
+        memcpy(input.data() + 1, data.data(), data.size());
+        unsigned char* result;
+
+        result = HMAC(EVP_sha1(), (unsigned char*) hash.data(), hash.size(),
+                      (unsigned char*) input.data(), input.size(), NULL, NULL);
+
+        memcpy(hash.data(), result, hash.size());
+    }
+        
+        
+    void HMAC_MD5(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
+    {
+        hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
+        
+        std::vector<uint8_t> input(data.size() + 1);
+        input.at(0) = 0x01;
+        memcpy(input.data() + 1, data.data(), data.size());
+        unsigned char* result;
+
+        result = HMAC(EVP_md5(), (unsigned char*) hash.data(), hash.size(),
+                      (unsigned char*) input.data(), input.size(), NULL, NULL);
+
+        memcpy(hash.data(), result, hash.size());
+    }
+
+
 
 }
     
