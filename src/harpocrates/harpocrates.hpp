@@ -30,6 +30,8 @@ namespace harpocrates
     */
     void encrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);
 
+    // void encrypt_ctr(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);    
+
     /* Decrypts the data based on the provided key using AES-CBC-128.
     * If the key is longer than 16Bytes, no problem we cut it off
     * The input vector is overwritten to contain the result of the decryption. The expected input format:
@@ -43,6 +45,8 @@ namespace harpocrates
     * @paramrandom_iv determines if a random IV was used for encryption. If set to false we will use an all 0 IV
     */
     void decrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);
+
+    void decrypt_ctr(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);    
 }
 #endif /* HARPOCRATES_H */ 
 

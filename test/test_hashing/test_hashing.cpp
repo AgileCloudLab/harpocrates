@@ -12,6 +12,7 @@
 #include <utility>
 #include <sstream>
 
+
 void print_hex(const std::vector<uint8_t>& data)
 {
     std::stringstream ss;
@@ -20,7 +21,7 @@ void print_hex(const std::vector<uint8_t>& data)
         ss << std::hex << (int) elm; 
     }
 
-    std::cout << ss.str() << std::endl; 
+    std::cout <<  ss.str() << std::endl; 
 }
 
 std::vector<uint8_t> generate_data(size_t size)
@@ -161,6 +162,48 @@ TEST(test_hashing, test_sha512_hashing_4kb)
 
     EXPECT_EQ(hash1, hash2);
     EXPECT_NE(hash1, hash3);    
+}
+
+TEST(test_hashing, test_hmac_vector_hashing_1kb)
+{
+    std::vector<uint8_t> data = generate_data(1024);
+
+    std::vector<uint8_t> hash1;
+    std::vector<uint8_t> hash2;
+    harpocrates::hashing::vectors::hmac_hash(data, hash1);
+    EXPECT_EQ(hash1.size(), (size_t)20);
+
+    harpocrates::hashing::vectors::hmac_hash(data, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)20);
+
+    EXPECT_EQ(hash1, hash2);
+
+    std::vector<uint8_t> data2 = generate_data(1024);
+    harpocrates::hashing::vectors::hmac_hash(data2, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)20);
+
+    EXPECT_NE(hash1, hash2);
+}
+
+TEST(test_hashing, test_hmac_vector_hashing_4kb)
+{
+    std::vector<uint8_t> data = generate_data(4096);
+
+    std::vector<uint8_t> hash1;
+    std::vector<uint8_t> hash2;
+    harpocrates::hashing::vectors::hmac_hash(data, hash1);
+    EXPECT_EQ(hash1.size(), (size_t)20);
+
+    harpocrates::hashing::vectors::hmac_hash(data, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)20);
+
+    EXPECT_EQ(hash1, hash2);
+
+    std::vector<uint8_t> data2 = generate_data(4096);
+    harpocrates::hashing::vectors::hmac_hash(data2, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)20);
+
+    EXPECT_NE(hash1, hash2);
 }
 
 int main(int argc, char **argv) {

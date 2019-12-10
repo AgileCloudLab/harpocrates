@@ -110,6 +110,76 @@ namespace harpocrates
 	data = ciphertext;
     }
 
+    // void encrypt_ctr(const std::string& key, std::vector<uint8_t>& data, bool random_iv)
+    // {
+    //     if (key.size() < HARPOCRATES_AES_KEY_SIZE)
+    //     {
+    //         throw std::runtime_error("Provided AES key is too short! By default key must be 16 bytes long");
+    //     }
+
+    //    	// Set up the key, convert it to the format required by OpenSSL
+    //     unsigned char ukey[HARPOCRATES_AES_KEY_SIZE];        
+    //     for (uint32_t i = 0; i < HARPOCRATES_AES_KEY_SIZE; ++i)
+    //     {
+    //         ukey[i] = (unsigned char) key[i];
+    //     }
+    //     AES_KEY encryption_key;
+    //     AES_set_encrypt_key(ukey, HARPOCRATES_AES_KEY_SIZE * 8, &encryption_key); //key size in bits rather than bytes
+
+    //     // If necessary, pad the cleartext to have a size that is a multiple of AES_BLOCK_SIZE
+    //     size_t cleartext_size = data.size();
+    //     size_t padded_size = cleartext_size;
+    //     uint8_t padding  = AES_BLOCK_SIZE - cleartext_size % AES_BLOCK_SIZE;
+	
+    //     if(padding == AES_BLOCK_SIZE)
+    //     {
+    //         padding = 0;
+    //     }
+	    
+    //     if(padding != 0)
+    //     {
+    //         padded_size += padding;
+    //         data.resize(padded_size);
+    //     }
+
+    //     size_t ciphertext_size = padded_size;
+	
+    //     // Generate the initialization vector, either randomly or by chosing an all-0 vector
+    //     std::vector<uint8_t> iv;        
+    //     if (random_iv)
+    //     {
+    //         iv = generate_iv(AES_BLOCK_SIZE);
+    //         ciphertext_size += AES_BLOCK_SIZE;
+    //     }
+    //     else
+    //     {
+    //         iv = std::vector<uint8_t>(AES_BLOCK_SIZE, 0);
+    //     }
+
+    //     //Generate a vector representing the original cleartext_size
+    //     const size_t size_vec_size = 1;// Extra byte to represent the amount of padding
+    //     ciphertext_size += 1;
+
+    //     //Create the vector that will hold the ciphertext and emplace the metadata to its end
+    //     //Format: {SIZE_OF_PADDING(1B) | PADDED_CIPHERTEXT | IV(OPTIONAL 16B)} 
+    //     std::vector<uint8_t> ciphertext(ciphertext_size);       
+    //     ciphertext[0] = padding;
+    //     if(random_iv)
+    //     {
+    //         memcpy(ciphertext.data() + size_vec_size + padded_size, iv.data(), AES_BLOCK_SIZE);
+    //     }
+		
+    //     //Do the actual encryption
+    //     // TODO:         AES_ctr128_encrypt(indata, outdata, bytes_read, &key, state.ivec, state.ecount, &state.num);
+    //     // https://www.gurutechnologies.net/blog/aes-ctr-encryption-in-c/
+    //     AES_ctr128_encrypt(data.data(), ciphertext.data() + size_vec_size, padded_size, &encryption_key, iv.data(), AES_ENCRYPT);
+
+    //     //Save result
+    //     data = ciphertext;
+    // }
+
+    
+    
     /* Decrypts the data based on the provided key using AES-CBC-128.
     * If the key is longer than 16Bytes, no problem we cut it off
     * The input vector is overwritten to contain the result of the decryption. The expected input format:
