@@ -112,23 +112,17 @@ namespace vectors
         {
             sha1_hash(data, key);
         }
+        else
+        {
+            key = std::vector<uint8_t>(SHA_DIGEST_LENGTH, 0); 
+        }
         
-        //unsigned int length = SHA_DIGEST_LENGTH;
-        //hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
-
         uint8_t* temp;
 
         temp =  (uint8_t*) ::HMAC(EVP_sha1(), key.data(), key.size(),
                                   (unsigned char*)temp_data.data(), temp_data.size(), NULL, NULL);
         hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
         memcpy(hash.data(), temp, SHA_DIGEST_LENGTH);
-        // HMAC_CTX hmacctx;
-        // HMAC_CTX_init(&hmacctx);
-
-        // HMAC_Init_ex(&hmacctx, (unsigned char*) key.data(), key.size(), EVP_sha1(), NULL);
-        // HMAC_Update(&hmacctx, (unsigned char*) temp_data.data(), data.size());
-        // HMAC_Final(&hmacctx, (unsigned char*) hash.data(), &length);
-        // HMAC_CTX_cleanup(&hmacctx);
     }
 
 }
