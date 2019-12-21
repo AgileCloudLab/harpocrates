@@ -1,5 +1,11 @@
 #include "hashing.hpp"
+
 #include <openssl/sha.h>
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
+
+#include <cstring>
+
 namespace harpocrates
 {
 namespace hashing
@@ -35,6 +41,8 @@ namespace vectors
         case hash_type::SHA512:
             sha512_hash(data, hash);
             break;
+        case hash_type::HMAC:
+            hmac_hash(data, hash);
         default:
             sha1_hash(data, hash);
             break;            
@@ -90,7 +98,32 @@ namespace vectors
         {
             hash.at(i) = (uint8_t) digest[i]; 
         }
-    }    
+    }
+
+    void hmac_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash, bool empty_key)
+    {
+        std::vector<uint8_t> temp_data(data.size() + 1);
+        temp_data.at(0) = 0x01;
+        std::memcpy(temp_data.data()+1, data.data(), data.size());
+
+        std::vector<uint8_t> key;
+
+        if (!empty_key)
+        {
+            sha1_hash(data, key);
+        }
+        else
+        {
+            key = std::vector<uint8_t>(SHA_DIGEST_LENGTH, 0); 
+        }
+        
+        uint8_t* temp;
+
+        temp =  (uint8_t*) ::HMAC(EVP_sha1(), key.data(), key.size(),
+                                  (unsigned char*)temp_data.data(), temp_data.size(), NULL, NULL);
+        hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
+        memcpy(hash.data(), temp, SHA_DIGEST_LENGTH);
+    }
 
 }
     
