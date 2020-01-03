@@ -307,9 +307,9 @@ TEST(test_encrypt_decrypt, test_ctr128_encrypt_decrypt_1kb)
     std::vector<uint8_t> temp_crypt(data);
     EXPECT_EQ(data, temp_crypt);
 
-    // harpocrates::decrypt_ctr(key, data);
-    // EXPECT_NE(data, temp_crypt);
-    // EXPECT_EQ(data, temp);
+    harpocrates::decrypt_ctr(key, data);
+    EXPECT_NE(data, temp_crypt);
+    EXPECT_EQ(data, temp);
 }
 
 
