@@ -30,7 +30,7 @@ namespace harpocrates
     */
     void encrypt(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);
 
-    // void encrypt_ctr(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);    
+    void encrypt_ctr(const std::string& key, std::vector<uint8_t>& data, bool random_iv=false);    
 
     /* Decrypts the data based on the provided key using AES-CBC-128.
     * If the key is longer than 16Bytes, no problem we cut it off
