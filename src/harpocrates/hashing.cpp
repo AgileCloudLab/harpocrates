@@ -1,10 +1,8 @@
 #include "hashing.hpp"
 
-#include <openssl/engine.h>
-#include <openssl/evp.h>
-
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
+#include <openssl/evp.h>
 
 #include <cstring>
 
@@ -43,6 +41,8 @@ namespace vectors
         case hash_type::SHA512:
             sha512_hash(data, hash);
             break;
+        case hash_type::HMAC:
+            hmac_hash(data, hash);
         default:
             sha1_hash(data, hash);
             break;            
@@ -100,38 +100,30 @@ namespace vectors
         }
     }
 
-    void HMAC_SHA1(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
+    void hmac_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash, bool empty_key)
     {
+        std::vector<uint8_t> temp_data(data.size() + 1);
+        temp_data.at(0) = 0x01;
+        std::memcpy(temp_data.data()+1, data.data(), data.size());
+
+        std::vector<uint8_t> key;
+
+        if (!empty_key)
+        {
+            sha1_hash(data, key);
+        }
+        else
+        {
+            key = std::vector<uint8_t>(SHA_DIGEST_LENGTH, 0); 
+        }
+        
+        uint8_t* temp;
+
+        temp =  (uint8_t*) ::HMAC(EVP_sha1(), key.data(), key.size(),
+                                  (unsigned char*)temp_data.data(), temp_data.size(), NULL, NULL);
         hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
-        
-        std::vector<uint8_t> input(data.size() + 1);
-        input.at(0) = 0x01;
-        memcpy(input.data() + 1, data.data(), data.size());
-        unsigned char* result;
-
-        result = HMAC(EVP_sha1(), (unsigned char*) hash.data(), hash.size(),
-                      (unsigned char*) input.data(), input.size(), NULL, NULL);
-
-        memcpy(hash.data(), result, hash.size());
+        memcpy(hash.data(), temp, SHA_DIGEST_LENGTH);
     }
-        
-        
-    void HMAC_MD5(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
-    {
-        hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
-        
-        std::vector<uint8_t> input(data.size() + 1);
-        input.at(0) = 0x01;
-        memcpy(input.data() + 1, data.data(), data.size());
-        unsigned char* result;
-
-        result = HMAC(EVP_md5(), (unsigned char*) hash.data(), hash.size(),
-                      (unsigned char*) input.data(), input.size(), NULL, NULL);
-
-        memcpy(hash.data(), result, hash.size());
-    }
-
-
 
 }
     

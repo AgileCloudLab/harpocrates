@@ -12,7 +12,8 @@ enum hash_type
 {
     SHA1,
     SHA256,
-    SHA512                
+    SHA512,
+    HMAC,
 };
 
     /// Returns length of digest for specified hash function
@@ -44,9 +45,7 @@ namespace vectors
     /// @param hash the sink for the hash        
     void sha512_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
 
-    void HMAC_SHA1(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
-    void HMAC_MD5(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
-        
+    void hmac_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash, bool empty_key=true);
 }
 
 namespace pointers
