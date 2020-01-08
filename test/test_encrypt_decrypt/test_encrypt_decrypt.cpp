@@ -309,6 +309,26 @@ TEST(test_encrypt_decrypt, test_ctr128_encrypt_decrypt_1kb)
 
     harpocrates::decrypt_ctr(key, data);
     EXPECT_NE(data, temp_crypt);
+    EXPECT_EQ(data, temp);   
+}
+
+TEST(test_encrypt_decrypt, test_ctr128_encrypt_decrypt_4kb)
+{
+
+    std::vector<uint8_t> data = generate_data(4096);
+    std::vector<uint8_t> temp = data; 
+    EXPECT_EQ(data, temp);
+    
+    std::string key = "WAPFZ52K0446FPJ32OU7";
+
+    harpocrates::encrypt_ctr(key, data);
+    EXPECT_NE(data, temp);
+
+    std::vector<uint8_t> temp_crypt(data);
+    EXPECT_EQ(data, temp_crypt);
+
+    harpocrates::decrypt_ctr(key, data);
+    EXPECT_NE(data, temp_crypt);
     EXPECT_EQ(data, temp);
 
 
