@@ -51,6 +51,7 @@ def build(bld):
     
     # Build Examples
     bld.recurse('examples/simple_example')
+    bld.recurse('examples/simple_encrypt_ctr_example')
 
     # Build Test
     bld.recurse('test/test_encrypt_decrypt')
