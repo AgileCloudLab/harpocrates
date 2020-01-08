@@ -330,9 +330,6 @@ TEST(test_encrypt_decrypt, test_ctr128_encrypt_decrypt_4kb)
     harpocrates::decrypt_ctr(key, data);
     EXPECT_NE(data, temp_crypt);
     EXPECT_EQ(data, temp);
-
-
-    
 }
 
 
