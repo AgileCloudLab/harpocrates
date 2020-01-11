@@ -43,6 +43,7 @@ namespace vectors
             break;
         case hash_type::HMAC:
             hmac_hash(data, hash);
+	    break;
         default:
             sha1_hash(data, hash);
             break;            
