@@ -49,10 +49,10 @@ namespace vectors
             break;
         case hash_type::HMAC:
             hmac_hash(data, hash);
-	    break;
-	case hash_type::CRC32:
+            break;
+	      case hash_type::CRC32:
             crc32_hash(data, hash);
-	    break;
+	          break;
         default:
             sha1_hash(data, hash);
             break;            
