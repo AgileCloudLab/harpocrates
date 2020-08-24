@@ -1,6 +1,12 @@
 # Change log for Harpocrates
 
-# Latest 3.0.0
+
+# Latest: 3.2.0
+
+- Minor: Added a function to convert a hash type to a string 
+- Bug fix: CRC was appending data to end of vector instead of replacing. 
+
+# 3.0.0
 
 - Major: Splitting functions in the hashing name space into two sub-namespaces. One for vectors and one for pointers
 
