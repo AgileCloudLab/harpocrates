@@ -1,8 +1,9 @@
 #ifndef HARPOCRATES_HASHING_H
 #define HARPOCRATES_HASHING_H
 
-#include <vector>
+#include <string>
 #include <cstdint>
+#include <vector>
 
 namespace harpocrates
 {
@@ -19,7 +20,10 @@ enum hash_type
     /// Returns length of digest for specified hash function
     /// @param type the type of hash function
     /// @return length of digest in bytes
-    size_t get_digest_length(hash_type type);    
+    size_t get_digest_length(hash_type type);
+
+    std::string hash_name(hash_type type);
+        
 
 namespace vectors
 {

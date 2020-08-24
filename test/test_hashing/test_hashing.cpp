@@ -31,6 +31,12 @@ std::vector<uint8_t> generate_data(size_t size)
     return data; 
 }
 
+TEST(test_hashing, test_hash_name)
+{
+    EXPECT_EQ("SHA-1", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA1));
+    EXPECT_EQ("SHA-256", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA256));
+    EXPECT_EQ("SHA-512", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA512));    
+}
 
 TEST(test_hashing, test_sha1_hashing_1kb)
 {

@@ -24,7 +24,22 @@ namespace hashing
         default:
             return SHA_DIGEST_LENGTH;
         }
-     }    
+     }
+
+    std::string hash_name(hash_type type)
+    {
+	switch(type)
+        {
+        case hash_type::SHA1:
+            return "SHA-1";
+	case hash_type::SHA256:
+	    return "SHA-256";
+        case hash_type::SHA512:
+            return "SHA-512"; 
+        default:
+            return "SHA-1"; 
+        }
+    }
     
 namespace vectors
 {
