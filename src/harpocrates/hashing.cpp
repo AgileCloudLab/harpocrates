@@ -165,6 +165,7 @@ namespace vectors
         static auto const table = generate_crc_lookup_table();
 
         std::uint_fast32_t temp = std::uint_fast32_t{0xFFFFFFFFuL} & ~std::accumulate(data.cbegin(), data.cend(), ~std::uint_fast32_t{0} & std::uint_fast32_t{0xFFFFFFFFuL}, [](std::uint_fast32_t checksum, std::uint_fast32_t value){return table[(checksum ^ value) & 0xFFu] ^ (checksum >> 8);});
+        hash.clear();
         hash.reserve(CRC_DIGEST_LENGTH);
         for (int i = CRC_DIGEST_LENGTH - 1; i >= 0; --i)
 	    hash.push_back(*(static_cast<uint8_t *>(static_cast<void *>(&temp)) + i));
