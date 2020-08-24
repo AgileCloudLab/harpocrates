@@ -4,7 +4,11 @@
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
 
+#include <algorithm>
+#include <array>
+#include <cstdint>
 #include <cstring>
+#include <numeric>
 
 namespace harpocrates
 {
@@ -21,6 +25,8 @@ namespace hashing
 	    return SHA256_DIGEST_LENGTH;
         case hash_type::SHA512:
             return SHA512_DIGEST_LENGTH;
+	case hash_type::CRC32:
+            return CRC_DIGEST_LENGTH;
         default:
             return SHA_DIGEST_LENGTH;
         }
@@ -58,7 +64,10 @@ namespace vectors
             break;
         case hash_type::HMAC:
             hmac_hash(data, hash);
-	    break;
+            break;
+	      case hash_type::CRC32:
+            crc32_hash(data, hash);
+	          break;
         default:
             sha1_hash(data, hash);
             break;            
@@ -141,6 +150,40 @@ namespace vectors
         memcpy(hash.data(), temp, SHA_DIGEST_LENGTH);
     }
 
+    std::array<std::uint_fast32_t, 256> generate_crc_lookup_table() noexcept
+    {
+        auto const reversed_polynomial = std::uint_fast32_t{0xEDB88320uL};
+
+        struct byte_checksum
+	{
+	    std::uint_fast32_t operator()() noexcept
+	    {
+                auto checksum = static_cast<std::uint_fast32_t>(n++);
+      
+                for (auto i = 0; i < 8; ++i)
+                    checksum = (checksum >> 1) ^ ((checksum & 0x1u) ? reversed_polynomial : 0);
+
+                return checksum;
+            }
+
+            unsigned n = 0;
+        };
+
+	auto table = std::array<std::uint_fast32_t, 256>{};
+	std::generate(table.begin(), table.end(), byte_checksum{});
+
+	return table;
+    }
+  
+    void crc32_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash)
+    {
+        static auto const table = generate_crc_lookup_table();
+
+        std::uint_fast32_t temp = std::uint_fast32_t{0xFFFFFFFFuL} & ~std::accumulate(data.cbegin(), data.cend(), ~std::uint_fast32_t{0} & std::uint_fast32_t{0xFFFFFFFFuL}, [](std::uint_fast32_t checksum, std::uint_fast32_t value){return table[(checksum ^ value) & 0xFFu] ^ (checksum >> 8);});
+        hash.reserve(CRC_DIGEST_LENGTH);
+        for (int i = CRC_DIGEST_LENGTH - 1; i >= 0; --i)
+	    hash.push_back(*(static_cast<uint8_t *>(static_cast<void *>(&temp)) + i));
+    }
 }
     
 namespace pointers
