@@ -1,8 +1,11 @@
 #ifndef HARPOCRATES_HASHING_H
 #define HARPOCRATES_HASHING_H
 
-#include <vector>
+#include <string>
 #include <cstdint>
+#include <vector>
+
+#define CRC_DIGEST_LENGTH 4
 
 namespace harpocrates
 {
@@ -14,12 +17,16 @@ enum hash_type
     SHA256,
     SHA512,
     HMAC,
+    CRC32,
 };
 
     /// Returns length of digest for specified hash function
     /// @param type the type of hash function
     /// @return length of digest in bytes
-    size_t get_digest_length(hash_type type);    
+    size_t get_digest_length(hash_type type);
+
+    std::string hash_name(hash_type type);
+        
 
 namespace vectors
 {
@@ -46,6 +53,11 @@ namespace vectors
     void sha512_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
 
     void hmac_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash, bool empty_key=true);
+
+    /// Creates a CRC-32 hash finger print for a chunk
+    /// @param data the data chunk the fingerprint will be constructed for
+    /// @param hash the sink for the hash
+    void crc32_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
 }
 
 namespace pointers

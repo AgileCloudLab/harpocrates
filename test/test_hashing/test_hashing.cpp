@@ -31,6 +31,12 @@ std::vector<uint8_t> generate_data(size_t size)
     return data; 
 }
 
+TEST(test_hashing, test_hash_name)
+{
+    EXPECT_EQ("SHA-1", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA1));
+    EXPECT_EQ("SHA-256", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA256));
+    EXPECT_EQ("SHA-512", harpocrates::hashing::hash_name(harpocrates::hashing::hash_type::SHA512));    
+}
 
 TEST(test_hashing, test_sha1_hashing_1kb)
 {
@@ -245,6 +251,48 @@ TEST(test_hashing, test_hmac_vector_hashing_4kb_none_empty_key)
     std::vector<uint8_t> data2 = generate_data(4096);
     harpocrates::hashing::vectors::hmac_hash(data2, hash2, false);
     EXPECT_EQ(hash2.size(), (size_t)20);
+
+    EXPECT_NE(hash1, hash2);
+}
+
+TEST(test_hashing, test_crc_vector_hashing_1kb)
+{
+    std::vector<uint8_t> data = generate_data(1024);
+
+    std::vector<uint8_t> hash1;
+    std::vector<uint8_t> hash2;
+    harpocrates::hashing::vectors::crc32_hash(data, hash1);
+    EXPECT_EQ(hash1.size(), (size_t)CRC_DIGEST_LENGTH);
+
+    harpocrates::hashing::vectors::crc32_hash(data, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)CRC_DIGEST_LENGTH);
+
+    EXPECT_EQ(hash1, hash2);
+
+    std::vector<uint8_t> data2 = generate_data(1024);
+    harpocrates::hashing::vectors::crc32_hash(data2, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)CRC_DIGEST_LENGTH);
+
+    EXPECT_NE(hash1, hash2);
+}
+
+TEST(test_hashing, test_crc_vector_hashing_4kb)
+{
+    std::vector<uint8_t> data = generate_data(4096);
+
+    std::vector<uint8_t> hash1;
+    std::vector<uint8_t> hash2;
+    harpocrates::hashing::vectors::crc32_hash(data, hash1);
+    EXPECT_EQ(hash1.size(), (size_t)CRC_DIGEST_LENGTH);
+
+    harpocrates::hashing::vectors::crc32_hash(data, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)CRC_DIGEST_LENGTH);
+
+    EXPECT_EQ(hash1, hash2);
+
+    std::vector<uint8_t> data2 = generate_data(4096);
+    harpocrates::hashing::vectors::crc32_hash(data2, hash2);
+    EXPECT_EQ(hash2.size(), (size_t)CRC_DIGEST_LENGTH);
 
     EXPECT_NE(hash1, hash2);
 }
