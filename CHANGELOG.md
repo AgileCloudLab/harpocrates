@@ -1,6 +1,12 @@
 # Change log for Harpocrates
 
-# Latest 3.0.0
+
+# Latest 3.2.1
+
+- Added selection for CRC32 
+- Added HMAC and CRC32 to `hash_name` function
+
+# 3.0.0
 
 - Major: Splitting functions in the hashing name space into two sub-namespaces. One for vectors and one for pointers
 
