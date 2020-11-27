@@ -41,7 +41,11 @@ namespace hashing
 	case hash_type::SHA256:
 	    return "SHA-256";
         case hash_type::SHA512:
-            return "SHA-512"; 
+            return "SHA-512";
+        case hash_type::HMAC:
+            return "HMAC";
+        case hash_type::CRC32:
+            return "CRC32";
         default:
             return "SHA-1"; 
         }
@@ -65,9 +69,9 @@ namespace vectors
         case hash_type::HMAC:
             hmac_hash(data, hash);
             break;
-	      case hash_type::CRC32:
+        case hash_type::CRC32:
             crc32_hash(data, hash);
-	          break;
+            break;
         default:
             sha1_hash(data, hash);
             break;            

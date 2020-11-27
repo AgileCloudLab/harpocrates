@@ -1,5 +1,10 @@
 # Change log for Harpocrates
 
+# Latest 3.2.1
+
+- Added selection for CRC32 
+- Added HMAC and CRC32 to `hash_name` function
+
 
 # Latest: 3.2.0
 
