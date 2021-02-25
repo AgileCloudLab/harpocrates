@@ -11,14 +11,14 @@ namespace harpocrates
 {
 namespace hashing
 {
-enum hash_type
-{
-    SHA1,
-    SHA256,
-    SHA512,
-    HMAC,
-    CRC32,
-};
+    enum hash_type
+    {
+        SHA1,
+        SHA256,
+        SHA512,
+        HMAC,
+        CRC32,
+    };
 
     /// Returns length of digest for specified hash function
     /// @param type the type of hash function
@@ -26,6 +26,17 @@ enum hash_type
     size_t get_digest_length(hash_type type);
 
     std::string hash_name(hash_type type);
+
+    /// Create a hash for the data provided hash type
+    /// @param data that will be hashed
+    /// @param type is the type of hash used
+    /// @return a vector containing the hash of data
+    std::vector<uint8_t> hash(const std::vector<uint8_t>& data, hash_type type);
+
+    /// Creates a SHA-1 hash finger print for a chunk
+    /// @param data the data chunk the fingerprint will be constructed for
+    /// return a hash for the data
+    std::vector<uint8_t> sha1_hash(const std::vector<uint8_t>& data); 
         
 
 namespace vectors
@@ -34,12 +45,14 @@ namespace vectors
     /// @param data the data to be hashed
     /// @param hash will contain the hash
     /// @param type is the hash_type which will be used
+    [[deprecated]]
     void hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash, hash_type type);
 
-    
+
     /// Creates a SHA-1 hash finger print for a chunk
     /// @param data the data chunk the fingerprint will be constructed for
     /// @param hash the sink for the hash
+    [[deprecated]]
     void sha1_hash(const std::vector<uint8_t>& data, std::vector<uint8_t>& hash);
 
     /// Creates a SHA-256 hash finger print for a chunk

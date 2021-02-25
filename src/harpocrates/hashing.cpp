@@ -46,6 +46,35 @@ namespace hashing
             return "SHA-1"; 
         }
     }
+
+    std::vector<uint8_t> hash(const std::vector<uint8_t>& data, hash_type type)
+    {
+        switch(type)
+        {
+        case hash_type::SHA1:
+            return sha1_hash(data);
+        default:
+            return sha1_hash(data);
+        }        
+    }
+
+    std::vector<uint8_t> sha1_hash(const std::vector<uint8_t>& data)
+    {
+        unsigned char digest[SHA_DIGEST_LENGTH];
+
+        SHA_CTX shactx;
+
+        SHA1_Init(&shactx);
+        SHA1_Update(&shactx, data.data(), data.size());
+        SHA1_Final(digest, &shactx);
+
+        auto hash = std::vector<uint8_t>(SHA_DIGEST_LENGTH);
+        for (uint32_t i = 0; i < SHA_DIGEST_LENGTH; ++i)
+        {
+            hash.at(i) = (uint8_t) digest[i]; 
+        }
+        return hash; 
+    }
     
 namespace vectors
 {
