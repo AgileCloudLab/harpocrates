@@ -1,9 +1,15 @@
 # Change log for Harpocrates
 
 
-# Latest 3.2.1
+# Latest 4.0.0
 
-- Added selection for CRC32 
+- Adding support for OpenSSLv3
+- Adding simpler API possible due to above change
+- Deprecating building with WAF
+
+#  3.2.1
+
+- Added selection for CRC32
 - Added HMAC and CRC32 to `hash_name` function
 
 # 3.0.0
@@ -12,19 +18,19 @@
 
 # 2.5.2
 
-- Major: Releasing Harpocrates to the public 
+- Major: Releasing Harpocrates to the public
 
 # 2.5.1
 
 - Major: We now officially support SHA-1, SHA-256, and SHA-512 hashing of both `std::vector<uint8_t>` and `uint8_t *`
-- Minor: We fixed a bug in hashing that resulted in the last byte of a vector not being hashed 
+- Minor: We fixed a bug in hashing that resulted in the last byte of a vector not being hashed
 
 
-## 2.0.0 
+## 2.0.0
 - Minor: We have stopped using Crypto++ for AES encryption
-- Minor: We have moved to using OpenSSL for AES encryption 
-- Major: We have swapped the `key` and `data` parameter for both decrypt and encrypt 
-- Major: We have added a parameter `random_iv` for enabling generating random IV 
+- Minor: We have moved to using OpenSSL for AES encryption
+- Major: We have swapped the `key` and `data` parameter for both decrypt and encrypt
+- Major: We have added a parameter `random_iv` for enabling generating random IV
 - Minor: We have added the self contained capability of generating random IV
-- Minor: We have added Doxygen documentation 
-- Major: We have have moved to MIT License 
+- Minor: We have added Doxygen documentation
+- Major: We have have moved to MIT License

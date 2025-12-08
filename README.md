@@ -6,8 +6,8 @@ The library is based on top of OpenSSL and simply serves an easy to use API whic
 Harpocrates is developed at Aarhus University, Department of Engineering in the Group for Network Computing, Communications and Storage.
 
 #### Explaining the name
-Harpocrates is the Greek god of silence, secretes and confidentiality
 
+Harpocrates is the Greek god of silence, secretes and confidentiality.
 
 
 ## License
@@ -24,11 +24,10 @@ This library depends on [*openSSL*](https://www.openssl.org/), where the develop
 | Fedora   | `sudo dnf install openssl-devel`  |
 | MacOS    | `brew install openssl`            |
 
-For building Harpocrates we use the waf build system [*WAF*](https://waf.io/), which requires *python v2.7+*, but not 3.
+# Build and Install
 
-We have made the restriction that Harpocrates can only be build using `clang++` so you will need that. This will change later.
-
-# Build
+Harpocrates allows for builds using [CMake](https://cmake.org/) for newer releases and [*WAF*](https://waf.io/) for backwards compatibility.
+*Installation* is only available when using CMake
 
 ## Build using CMake
 
@@ -39,17 +38,32 @@ cmake ..
 make
 ```
 
-To install
+To install Harpocrates on a system.
 
-```cmake
+```bash
 make install
 ```
 
-Build Test
+### Build and Run Test
 
-Build Measurements
+```bash
+cmake .. -DBUILD_TEST=1
+```
+
+### Build and Run Measurements
+
+```bash
+cmake .. -DBUILD_MEASUREMENTS=1
+```
 
 ## Build using waf
+
+
+> [!CAUTION]
+> This is only for legacy application using an older version of Hapocrates
+
+For building Harpocrates we use the waf build system [*WAF*](https://waf.io/), which requires *python v2.7+*, but not 3.
+We have made the restriction that Harpocrates can only be build using `clang++` so you will need that. This will change later.
 
 To build Harpocrates you must first configure the project, in the root folder of the project run the command:
 
@@ -183,7 +197,7 @@ std::vector<uint8_t> random_data(size_t size)
 | Contributor   | Contact           | Contribution                                                |
 |---------------|-------------------|-------------------------------------------------------------|
 | Marton Sipsos | siposm@aut.bme.hu | Added benchmarks to Harpocrates                             |
-| Lars Nielsen  | lani@eng.au.dk    | Maintainer, initial development, documentation, and testing |
+| Lars Nielsen  | lani@embras.dk    | Maintainer, initial development, documentation, and testing |
 
 
 
@@ -198,4 +212,5 @@ Project AUFF-2017-FLS-7-1, and Aarhus University’s DIGIT Centre.
 <a href="http://www.au.dk/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/aulogo_uk_var1_blue.png" alt="au-logo"/></a>
 <a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/Scale_IoT_Logo.png" alt="scale-iot-logo"/></a>
 <a href="http://eng.au.dk/en/research/electrical-and-computer-engineering/communications-and-networks/network-computing-communications-and-storage/"><img width="250" src="https://github.com/AgileCloudLab/harpocrates/blob/master/graphics/netx-logo.png" alt="netx-logo" /></a>
+<a href="https://obsidian-wolf-labs.com"><img width="250" src="https://obsidian-wolf-labs.com/assets/images/logo.svg" alt="owl-logo"/></a>
 </center>
